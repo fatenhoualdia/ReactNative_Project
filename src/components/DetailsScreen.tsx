@@ -19,6 +19,7 @@ export default function DetailsScreen({ navigation }: any) {
   const cardText9 = "";
   const cardText10 = "";
   const cardText7 = "hello ";
+  const cardText15 = "hello ";
 
 
   const handlePress = (cardText) => {
@@ -32,10 +33,21 @@ export default function DetailsScreen({ navigation }: any) {
 
       <TouchableOpacity style={styles.card} onPress={() => handlePress(cardText5 )}>
           <Image
+            source={require('./lkolia.jpeg')}
+            style={styles.cardImage}
+          />
+          <Text style={styles.cardText}> الأقسام الأكاديمية والاعتماد الأكاديمي</Text>
+          <Text style={styles.cardDescription}>
+</Text>
+
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.card} onPress={() => handlePress(cardText15 )}>
+          <Image
             source={require('./IMG-20240128-WA0011.jpg')}
             style={styles.cardImage}
           />
-          <Text style={styles.cardText}>  مكتب عميد الكلية</Text>
+          <Text style={styles.cardText}>    عميد الكلية</Text>
           <Text style={styles.cardDescription}>
     أ.د. زيد بن عبدالله آل عثمان
     أ. بدر بن حمد الحازمي
@@ -46,7 +58,7 @@ export default function DetailsScreen({ navigation }: any) {
     zaothman@ksu.edu.sa
 </Text>
 
-        </TouchableOpacity>
+        </TouchableOpacity> 
 
 
         <TouchableOpacity style={styles.card} onPress={() => handlePress(cardText6 )}>

@@ -3,10 +3,7 @@ import { ScrollView, View, Text, Image, TextInput, StyleSheet, TouchableOpacity 
 import Video from 'react-native-video';
 
 export default function HomeScreen({ navigation }: any) {
-  const handleSearch = () => {
-    // Implement your search functionality here
-    console.log('Search button pressed');
-  };
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -27,17 +24,7 @@ export default function HomeScreen({ navigation }: any) {
         {/* Add your college description text here */}
       </Text>
 
-      {/* Search Input */}
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search Class by name ..."
-          onChangeText={(text) => console.log(text)} // You can handle the onChangeText event as needed
-        />
-        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-          <Text style={styles.searchButtonText}>Search</Text>
-        </TouchableOpacity>
-      </View>
+   
 
       {/* Video */}
       <View style={styles.videoContainer}>
