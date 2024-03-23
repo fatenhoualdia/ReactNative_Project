@@ -1,76 +1,87 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert, TextInput } from 'react-native';
-import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
+import { StyleSheet, View, TextInput, ScrollView } from 'react-native';
+import { Table, Row, TableWrapper, Cell } from 'react-native-table-component';
+import jsonData from './data.json'; // Import JSON data
+
+// Composant de la table
+class DataTable extends Component {
+  render() {
+    const { tableHeaders, filteredData } = this.props;
+
+    return (
+      <Table borderStyle={{ borderColor: 'transparent' }}>
+        <Row
+          data={tableHeaders}
+          style={styles.head}
+          textStyle={styles.headerText}
+        />
+        {filteredData.map((rowData, index) => (
+          <TableWrapper key={index} style={[styles.row, index % 2 && { backgroundColor: '#f2f2f2' }]}>
+            {tableHeaders.map(header => (
+              <Cell
+                key={header}
+                data={rowData[header]}
+                textStyle={styles.text}
+              />
+            ))}
+          </TableWrapper>
+        ))}
+      </Table>
+    );
+  }
+}
 
 export default class ExampleFour extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tableHead: ['من المدخل الرئيسي','من المدخل الخلفي', 'الجناح',  'الطابق','القسم/الادارة','إسم القاعة','القاعة'],
-      tableData: [
-        ['إضغط لعرض المسار','إضغط لعرض المسار','مبنى 4', 'A', 'ألدور الثاني', 'قسم الفيزياء','1652'],
-        ['إضغط لعرض المسار','إضغط لعرض المسار','مبنى 4', 'B', 'ألدور الثاني', 'قسم الرياضيات','1552'],
-        ['إضغط لعرض المسار','إضغط لعرض المسار','مبنى 5', 'C', 'ألدور الثاني', 'قسم الرياضيات','16892'],
-        ['إضغط لعرض المسار','إضغط لعرض المسار','مبنى 5', 'D', 'ألدور الثاني', 'قسم كيمياء','1652'],
-        ['إضغط لعرض المسار','إضغط لعرض المسار','مبنى 4', 'A', 'ألدور الثاني', 'قسم الجيولوجيا','4582'],
-      ],
-      searchQuery: '', // For storing the search query
-    }
+      searchQuery: '',
+    };
   }
 
-  _alertIndex(index) {
-    Alert.alert(`الدور ثاني ${index + 1}`);
-  }
+  handleSearch = query => {
+    this.setState({ searchQuery: query });
+  };
 
   render() {
-    const state = this.state;
-    const element = (data, index) => (
-      <TouchableOpacity onPress={() => this._alertIndex(index)}>
-        <View style={styles.btn}>
-          <Text style={styles.btnText}>button</Text>
-        </View>
-      </TouchableOpacity>
+    const { searchQuery } = this.state;
+
+    // Filter the JSON data based on the search query
+    const filteredData = jsonData.filter(item =>
+      Object.values(item).some(
+        value => typeof value === 'string' && value.includes(searchQuery),
+      )
     );
 
-    // Filter table data based on search query for the "إسم القاعة" column
-    const filteredTableData = state.tableData.filter(row =>
-      row[5].includes(state.searchQuery)
-    );
+    // Extract table headers from the first item in the filtered data
+    const tableHeaders = filteredData.length > 0 ? Object.keys(filteredData[0]) : [];
 
     return (
       <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          onChangeText={query => this.setState({ searchQuery: query })}
-          value={state.searchQuery}
-          placeholder="Filter by إسم القاعة..."
-        />
-        <Table borderStyle={{borderColor: 'transparent'}}>
-          <Row data={state.tableHead} style={styles.head} textStyle={styles.headerText}/>
-          {
-            filteredTableData.map((rowData, index) => (
-              <TableWrapper key={index} style={styles.row}>
-                {
-                  rowData.map((cellData, cellIndex) => (
-                    <Cell key={cellIndex} data={cellIndex === 3 ? element(cellData, index) : cellData} textStyle={styles.text}/>
-                  ))
-                }
-              </TableWrapper>
-            ))
-          }
-        </Table>
+        <ScrollView>
+          <TextInput
+            style={styles.input}
+            onChangeText={this.handleSearch}
+            value={searchQuery}
+            placeholder="Filtrer par إسم القاعة.."
+          />
+          <DataTable tableHeaders={tableHeaders} filteredData={filteredData} />
+        </ScrollView>
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 2, paddingTop: 30, backgroundColor: '#fff' },
-  head: { height: 100, backgroundColor: '#1f83c2' },
-  text: { margin: 5, color: '#000', fontSize: 13, textAlign: 'center' },
-  headerText: { margin: 3, color: '#fff', fontSize: 20, textAlign: 'center' },
-  row: { flexDirection: 'row', backgroundColor: '#e6e5e3' },
-  btn: { width: 45, height: 18, backgroundColor: '#78B7BB',  borderRadius: 2},
-  btnText: { textAlign: 'center', color: '#fff' },
-  input: { height: 40, borderColor: 'gray', borderWidth: 2, marginBottom: 20, paddingLeft: 10 },
+  input: {
+    height: 60,
+    borderColor: 'blue',
+    borderWidth: 2,
+    marginBottom: 20,
+    paddingLeft: 10,
+  },
+  head: { height: 60, backgroundColor: '#318CE7', fontSize: 20},
+  text: { margin: 6, fontSize: 14 },
+  row: { flexDirection: 'row', backgroundColor: '#FFF1C1' },
 });
